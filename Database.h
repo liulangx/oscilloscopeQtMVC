@@ -3,10 +3,16 @@
 typedef unsigned short u_short;
 
 typedef float LLFLOAT;
+typedef u_short LLUSHORT;
 struct vector2f
 {
     LLFLOAT _x, _y;
 };
+struct vector3uint
+{
+    LLUSHORT _x, _y, _z;
+};
+
 struct vector3f
 {
     LLFLOAT _x, _y, _z;
