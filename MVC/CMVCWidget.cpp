@@ -1,4 +1,4 @@
-#include "CMVCWidget.h"
+#include "MVC/CMVCWidget.h"
 
 CMVCWidget::CMVCWidget(QWidget *parent)
     : QWidget(parent),
@@ -37,7 +37,9 @@ CMVCWidget::CMVCWidget(QRect _initWindowForView, QWidget *parent)
 
 void CMVCWidget::initGL()
 {
-    m_scene->initGL();
+    m_scene->initGL(0);
+    m_scene->initGL(1);
+    m_scene->initGL(2);
 }
 
 void CMVCWidget::update()

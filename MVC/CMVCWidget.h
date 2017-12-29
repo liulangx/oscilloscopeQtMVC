@@ -1,7 +1,7 @@
 #ifndef CMVCWIDGET_H
 #define CMVCWIDGET_H
-#include "CScene.h"
-#include "CGraphicsView.h"
+#include "MVC/CScene.h"
+#include "MVC/CGraphicsView.h"
 #include <QGLWidget>
 #include <QWidget>
 #include <QRect>

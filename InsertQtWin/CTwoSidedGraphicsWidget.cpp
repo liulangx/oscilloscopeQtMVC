@@ -1,4 +1,4 @@
-#include "CTwoSidedGraphicsWidget.h"
+#include "InsertQtWin/CTwoSidedGraphicsWidget.h"
 
 
 CTwoSidedGraphicsWidget::CTwoSidedGraphicsWidget(QGraphicsScene *scene)

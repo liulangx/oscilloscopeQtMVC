@@ -1,6 +1,6 @@
 #ifndef CGRAPHICSWIDGET_H
 #define CGRAPHICSWIDGET_H
-#include "QGraphicsProxyWidget"
+#include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QPainter>
 

@@ -1,4 +1,4 @@
-#include "CGraphicsView.h"
+#include "MVC/CGraphicsView.h"
 class CMVCWidget;
 
 CGraphicsView::CGraphicsView(QWidget *_parent)

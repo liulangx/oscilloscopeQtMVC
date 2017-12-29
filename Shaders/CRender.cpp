@@ -1,4 +1,4 @@
-#include "CRender.h"
+#include "Shaders/CRender.h"
 
 #define ATTRIB_VERTEX 1
 
@@ -43,14 +43,14 @@ QGLShaderProgram * CRender::getShader()
 void CRender::initialShader()
 {
     //shader程序
-    if (!m_shaderprogram.addShaderFromSourceFile(QGLShader::Vertex, "/home/liu/asio/QOpenGLWidget_MVC/basic.vert"))
+    if (!m_shaderprogram.addShaderFromSourceFile(QGLShader::Vertex, "/home/liu/asio/QOpenGLWidget_MVC/Shaders/basic.vert"))
     {
         QMessageBox::information(NULL, "vert",
             m_shaderprogram.log(),
             QMessageBox::Yes | QMessageBox::No,
             QMessageBox::Yes);
     }
-    if (!m_shaderprogram.addShaderFromSourceFile(QGLShader::Fragment, "/home/liu/asio/QOpenGLWidget_MVC/basic.Frag"))
+    if (!m_shaderprogram.addShaderFromSourceFile(QGLShader::Fragment, "/home/liu/asio/QOpenGLWidget_MVC/Shaders/basic.Frag"))
     {
         QMessageBox::information(NULL, "Frag",
             m_shaderprogram.log(),

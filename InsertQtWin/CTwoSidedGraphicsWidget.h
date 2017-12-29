@@ -1,7 +1,7 @@
 #ifndef CTWOSIDEDGRAPHICSWIDGET_H
 #define CTWOSIDEDGRAPHICSWIDGET_H
 
-#include "CGraphicsWidget.h"
+#include "InsertQtWin/CGraphicsWidget.h"
 #include <QTimer>
 #include <QObject>
 #include <QGraphicsScene>

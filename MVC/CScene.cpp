@@ -48,15 +48,8 @@
 **
 ****************************************************************************/
 
-#include <QDebug>
-#include "CScene.h"
-#include <GL/glu.h>
-#include <QTime>
-#include <sys/time.h>
-#include <QGraphicsProxyWidget>
-#include "ItemDialog.h"
-#include "CGraphicsWidget.h"
-#include "CTwoSidedGraphicsWidget.h"
+//#include <QDebug>
+#include "MVC/CScene.h"
 
 #define pi 3.1415926
 
@@ -110,28 +103,31 @@ void CScene::drawBackground(QPainter *painter, const QRectF &)
 //    QTime time;
 //    time.start();
 //    double time_Start = (double)::clock();
-    struct timeval tpstart,tpend;
-    float timeuse;
-    gettimeofday(&tpstart,NULL);
+//    struct timeval tpstart,tpend;
+//    float timeuse;
+//    gettimeofday(&tpstart,NULL);
     painter->beginNativePainting();
     if(m_flagDraw)
     {
-        drawAxis();
+        drawAxis(m_index);
     }
     painter->endNativePainting();
 //    double time_End = (double)::clock();
-    gettimeofday(&tpend,NULL);
+    /*gettimeofday(&tpend,NULL);
     timeuse=(1000000*(tpend.tv_sec-tpstart.tv_sec) + tpend.tv_usec-tpstart.tv_usec)/1000000.0;
 
-    qDebug()<<timeuse<<"s";
+    qDebug()<<timeuse<<"s";*/
 
 
 //    qDebug() << (time_End - time_Start) / 1000.0 << "s";
 //    qDebug() << time.elapsed() / 1000.0 << "s";
 }
 
-void CScene::genAxis()
+void CScene::genAxis(u_short _index)
 {
+    vector<GLuint> m_arrowIndex;
+    vector<float> m_arrowpoint;
+    vector2f m_arrowbase = m_arrowbases.at(_index);
     m_arrowIndex.clear();
     m_arrowpoint.clear();
 
@@ -187,7 +183,12 @@ void CScene::genAxis()
         m_arrowIndex.push_back(offsite + index);
     }
 
-
+    vector2f m_x = m_xs.at(_index);
+    vector2f m_y = m_ys.at(_index);
+    vector2f m_z = m_zs.at(_index);
+    vector4f m_xcolor = m_xcolors.at(_index);
+    vector4f m_ycolor = m_ycolors.at(_index);
+    vector4f m_zcolor = m_zcolors.at(_index);
     //X�����ͷ
     m_arrowpoint.push_back(m_x._y);			//x���
     m_arrowpoint.push_back(m_y._x);			//y��С
@@ -265,33 +266,43 @@ void CScene::genAxis()
 
     m_arrowpoint.push_back(m_x._x); m_arrowpoint.push_back(m_y._x); m_arrowpoint.push_back(m_z._y);
     m_arrowpoint.push_back(m_zcolor._r); m_arrowpoint.push_back(m_zcolor._g); m_arrowpoint.push_back(m_zcolor._b); m_arrowpoint.push_back(m_zcolor._a);
-
+    m_arrowIndexs.insert(std::pair<u_short, vector<GLuint>>(_index, m_arrowIndex));
+    m_arrowpoints.insert(std::pair<u_short, vector<float>>(_index, m_arrowpoint));
 }
 
-void CScene::drawAxis()
+void CScene::drawAxis(u_short _index)
 {
+    GLuint m_vao = m_vaos.at(_index);
+    GLuint m_vbo = m_vbos.at(_index);
+    GLuint m_vboIndex = m_vboIndexs.at(_index);
+    qDebug() << _index;
     m_widget->makeCurrent();
-    m_therender.bindShader();
-    m_therender.getShader()->setUniformValue(m_uniformIndexRotPntAnixGrid, m_rotation);
+    m_therenders.at(_index)->bindShader();
+    m_therenders.at(_index)->getShader()->setUniformValue(m_uniformIndexRotPntAnixGrids.at(_index), m_rotations.at(_index));
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
         m_vboIndex);
-    glDrawElements(GL_TRIANGLES,m_arrowIndex.size()-18, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES,m_arrowIndexs.at(_index).size()-18, GL_UNSIGNED_INT, 0);
     glLineWidth(1.5);
-    glDrawElements(GL_LINES, 18, GL_UNSIGNED_INT, (char*)((m_arrowIndex.size() - 18)*4));
+    glDrawElements(GL_LINES, 18, GL_UNSIGNED_INT, (char*)((m_arrowIndexs.at(_index).size() - 18)*4));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //ll
     glBindVertexArray(0);
-    m_therender.releaseShader();
+    m_therenders.at(_index)->releaseShader();
+    qDebug() << _index;
 }
 
-void CScene::genAxisBuffer()
+void CScene::genAxisBuffer(u_short _index)
 {
+    GLuint m_vao = m_vaos.at(_index);
+    GLuint m_vbo = m_vbos.at(_index);
+    GLuint m_vboIndex = m_vboIndexs.at(_index);
+
     glBindVertexArray(m_vao);
     GLuint _persize = sizeof(vector3f) + sizeof(vector4f);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER,
-        m_arrowpoint.size() * sizeof(GLfloat),
-        m_arrowpoint.data(),
+        m_arrowpoints.at(_index).size() * sizeof(GLfloat),
+        m_arrowpoints.at(_index).data(),
         GL_DYNAMIC_DRAW);
 //    GLint size = 0;
 //    glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
@@ -315,8 +326,8 @@ void CScene::genAxisBuffer()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
         m_vboIndex);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-        m_arrowIndex.size() * sizeof(GLuint),
-        m_arrowIndex.data(),
+        m_arrowIndexs.at(_index).size() * sizeof(GLuint),
+        m_arrowIndexs.at(_index).data(),
         GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -330,15 +341,15 @@ void CScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     if (event->button() == Qt::LeftButton)
     {
-        m_leftPushDown = true;
-        m_mouseCordx = event->scenePos().x();
-        m_mouseCordy = event->scenePos().y();
+        m_leftPushDowns.at(m_index) = true;
+        m_mouseCordxs.at(m_index) = event->scenePos().x();
+        m_mouseCordys.at(m_index) = event->scenePos().y();
     }
     if (event->button() == Qt::RightButton)
     {
-        m_rightPushDown = true;
-        m_mouseCordx = event->scenePos().x();
-        m_mouseCordy = event->scenePos().y();
+        m_rightPushDowns.at(m_index) = true;
+        m_mouseCordxs.at(m_index) = event->scenePos().x();
+        m_mouseCordys.at(m_index) = event->scenePos().y();
     }
 
 }
@@ -348,14 +359,14 @@ void CScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseMoveEvent(event);
     if(event->isAccepted())
         return;
-    if(0 == m_frameType)
+    if(0 == m_frameTypes.at(m_index))
     {
-        if (m_leftPushDown)
+        if (m_leftPushDowns.at(m_index))
         {
-            float _roatx = m_mouseCordx - event->scenePos().x();
-            float _roaty = m_mouseCordy - event->scenePos().y();
-            m_mouseCordx = event->scenePos().x();
-            m_mouseCordy = event->scenePos().y();
+            float _roatx = m_mouseCordxs.at(m_index) - event->scenePos().x();
+            float _roaty = m_mouseCordys.at(m_index) - event->scenePos().y();
+            m_mouseCordxs.at(m_index) = event->scenePos().x();
+            m_mouseCordys.at(m_index) = event->scenePos().y();
             setRot(_roaty / 200,  _roatx/ 200/*,0*/);
         }
     }
@@ -369,43 +380,120 @@ void CScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     if (event->button() == Qt::LeftButton)
     {
-        m_leftPushDown = false;
+        m_leftPushDowns.at(m_index) = false;
     }
     if (event->button() == Qt::RightButton)
     {
-        m_rightPushDown = false;
+        m_rightPushDowns.at(m_index) = false;
     }
 
 }
 
-void CScene::initGL()
+void CScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseDoubleClickEvent(event);
+    if(event->isAccepted())
+        return;
+    if(m_index < 2)
+        m_index += 1;
+    else
+        m_index = 0;
+}
+
+void CScene::initGL(u_short _index)
 {
     m_widget->makeCurrent();
     initializeOpenGLFunctions();
 
-    m_therender.prepare();
+    vector2f m_x = {0, 1};
+    m_xs.insert(std::pair<u_short, vector2f>(_index, m_x));
+    vector2f m_y = {0, 1};
+    m_ys.insert(std::pair<u_short, vector2f>(_index, m_y));
+    vector2f m_z = {0, 1};
+    m_zs.insert(std::pair<u_short, vector2f>(_index, m_z));
+    vector2f m_arrowbase = {0.01f,0.05f};
+    m_arrowbases.insert(std::pair<u_short,vector2f>(_index, m_arrowbase));
+//    GLboolean m_flagDraw = false;
+//    m_flagDraws.insert(std::pair<u_short, GLboolean>(_index, m_flagDraw));
+    QMatrix4x4 m_rotation = {
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    };
+    m_rotations.insert(std::pair<u_short, QMatrix4x4>(_index, m_rotation));
+    bool m_leftPushDown = false;
+    bool m_rightPushDown = false;
+    int m_mouseCordx = 0;
+    int m_mouseCordy = 0;
+    u_char m_frameType = 0;
+    m_leftPushDowns.insert(std::pair<u_short, bool>(_index, m_leftPushDown));
+    m_rightPushDowns.insert(std::pair<u_short, bool>(_index, m_rightPushDown));
+    m_mouseCordxs.insert(std::pair<u_short, int>(_index, m_mouseCordx));
+    m_mouseCordys.insert(std::pair<u_short, int>(_index, m_mouseCordy));
+    m_frameTypes.insert(std::pair<u_short, u_char>(_index, m_frameType));
+
+    if(_index == 0)
+    {
+        vector4f m_xcolor = {1, 0, 0, 1};
+        m_xcolors.insert(std::pair<u_short, vector4f>(_index, m_xcolor));
+        vector4f m_ycolor = {0, 0, 0, 1};
+        m_ycolors.insert(std::pair<u_short, vector4f>(_index, m_ycolor));
+        vector4f m_zcolor = {0, 0, 0, 1};
+        m_zcolors.insert(std::pair<u_short, vector4f>(_index, m_zcolor));
+    }
+    else if(_index == 1)
+    {
+        vector4f m_xcolor = {0, 0, 0, 1};
+        m_xcolors.insert(std::pair<u_short, vector4f>(_index, m_xcolor));
+        vector4f m_ycolor = {0, 1, 0, 1};
+        m_ycolors.insert(std::pair<u_short, vector4f>(_index, m_ycolor));
+        vector4f m_zcolor = {0, 0, 0, 1};
+        m_zcolors.insert(std::pair<u_short, vector4f>(_index, m_zcolor));
+    }
+    else
+    {
+        vector4f m_xcolor = {0, 0, 0, 1};
+        m_xcolors.insert(std::pair<u_short, vector4f>(_index, m_xcolor));
+        vector4f m_ycolor = {0, 0, 0, 1};
+        m_ycolors.insert(std::pair<u_short, vector4f>(_index, m_ycolor));
+        vector4f m_zcolor = {0, 0, 1, 1};
+        m_zcolors.insert(std::pair<u_short, vector4f>(_index, m_zcolor));
+    }
+
+    CRender* m_therender = new CRender;
+    m_therenders.insert(std::pair<u_short, CRender*>(_index, m_therender));
+    m_therender->prepare();
+
+    GLuint m_vao, m_vbo, m_vboIndex;
 
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
     glGenBuffers(1, &m_vboIndex);
-    genAxis();
-    genAxisBuffer();
 
-    m_flagDraw = true;
+    m_vaos.insert(std::pair<u_short, GLuint>(_index, m_vao));
+    m_vbos.insert(std::pair<u_short, GLuint>(_index, m_vbo));
+    m_vboIndexs.insert(std::pair<u_short, GLuint>(_index, m_vboIndex));
+
+    genAxis(_index);
+    genAxisBuffer(_index);
+   /* GLboolean*/ m_flagDraw = true;
+//    m_flagDraws.insert(std::pair<u_short, GLboolean>(m_index, ))
     //m_timer->start();
 
+    GLuint m_uniformIndexRotPntAnixGrid;
+    m_uniformIndexRotPntAnixGrid = m_therenders.at(_index)->getShader()->uniformLocation("rot");
+    m_uniformIndexRotPntAnixGrids.insert(std::pair<u_short, GLuint>(_index, m_uniformIndexRotPntAnixGrid));
 
-    m_uniformIndexRotPntAnixGrid= m_therender.getShader()->uniformLocation("rot");
-
-    m_therender.bindShader();			//绑定着色器
-    m_therender.getShader()->setUniformValue(m_uniformIndexRotPntAnixGrid, m_rotation);
-    m_therender.releaseShader();        //解除着色器
+    m_therenders.at(_index)->bindShader();			//绑定着色器
+    m_therenders.at(_index)->getShader()->setUniformValue(m_uniformIndexRotPntAnixGrids.at(_index), m_rotations.at(_index));
+    m_therenders.at(_index)->releaseShader();        //解除着色器
 
 }
 
 void CScene::setRot(float _x, float _y)
 {
-    m_rotation = QMatrix4x4(1.0, 0.0, 0.0, 0.0,
+    m_rotations.at(m_index) = QMatrix4x4(1.0, 0.0, 0.0, 0.0,
                     0.0, cos(_x), -sin(_x), 0.0,
                     0.0, sin(_x), cos(_x), 0.0,
                         0.0, 0.0, 0.0, 1.0)*
@@ -416,7 +504,7 @@ void CScene::setRot(float _x, float _y)
                 QMatrix4x4(cos(_z), -sin(_z), 0.0, 0.0,
                     sin(_z), cos(_z), 0.0, 0.0,
                     0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0)*/*m_rotation;
+                    0.0, 0.0, 0.0, 1.0)*/*m_rotations.at(m_index);
     update();
 }
 

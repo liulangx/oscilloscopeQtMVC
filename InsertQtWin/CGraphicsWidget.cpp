@@ -1,4 +1,4 @@
-#include "CGraphicsWidget.h"
+#include "InsertQtWin/CGraphicsWidget.h"
 
 CGraphicsWidget::CGraphicsWidget()
     : QGraphicsProxyWidget(0, Qt::Window)
