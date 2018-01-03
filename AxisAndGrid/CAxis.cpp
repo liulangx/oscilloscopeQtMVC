@@ -104,25 +104,25 @@ void CAxis::createNewAxisForNewIndex(/*CRender *_render,*/ u_short _index)
     {
         vector4f m_xcolor = {1, 0, 0, 1};
         m_xcolors.insert(std::pair<u_short, vector4f>(_index, m_xcolor));
-        vector4f m_ycolor = {0, 0, 0, 1};
+        vector4f m_ycolor = {0, 1, 0, 1};
         m_ycolors.insert(std::pair<u_short, vector4f>(_index, m_ycolor));
-        vector4f m_zcolor = {0, 0, 0, 1};
+        vector4f m_zcolor = {0, 0, 1, 1};
         m_zcolors.insert(std::pair<u_short, vector4f>(_index, m_zcolor));
     }
     else if(_index == 1)
     {
-        vector4f m_xcolor = {0, 0, 0, 1};
+        vector4f m_xcolor = {1, 0, 0, 1};
         m_xcolors.insert(std::pair<u_short, vector4f>(_index, m_xcolor));
         vector4f m_ycolor = {0, 1, 0, 1};
         m_ycolors.insert(std::pair<u_short, vector4f>(_index, m_ycolor));
-        vector4f m_zcolor = {0, 0, 0, 1};
+        vector4f m_zcolor = {0, 0, 1, 1};
         m_zcolors.insert(std::pair<u_short, vector4f>(_index, m_zcolor));
     }
     else
     {
-        vector4f m_xcolor = {0, 0, 0, 1};
+        vector4f m_xcolor = {1, 0, 0, 1};
         m_xcolors.insert(std::pair<u_short, vector4f>(_index, m_xcolor));
-        vector4f m_ycolor = {0, 0, 0, 1};
+        vector4f m_ycolor = {0, 1, 0, 1};
         m_ycolors.insert(std::pair<u_short, vector4f>(_index, m_ycolor));
         vector4f m_zcolor = {0, 0, 1, 1};
         m_zcolors.insert(std::pair<u_short, vector4f>(_index, m_zcolor));

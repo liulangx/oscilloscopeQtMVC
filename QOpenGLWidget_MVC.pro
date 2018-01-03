@@ -13,7 +13,14 @@ HEADERS += \
     InsertQtWin/CTwoSidedGraphicsWidget.h \
     InsertQtWin/CGraphicsWidget.h \
     AxisAndGrid/CAxis.h \
-    DataManage/CVaoVboManager.h
+    DataManage/CVaoVboManager.h \
+    AxisAndGrid/CLines.h \
+    AxisAndGrid/CLineManager.h \
+    AxisAndGrid/CSceneManager.h \
+    AxisAndGrid/CAxisManager.h \
+    AxisAndGrid/CGrid.h \
+    AxisAndGrid/CGridManager.h \
+    AxisAndGrid/textureindex.h
 SOURCES += \
            main.cpp \
     LLComboWidget.cpp \
@@ -25,9 +32,20 @@ SOURCES += \
     InsertQtWin/CTwoSidedGraphicsWidget.cpp \
     InsertQtWin/CGraphicsWidget.cpp \
     AxisAndGrid/CAxis.cpp \
-    DataManage/CVaoVboManager.cpp
+    DataManage/CVaoVboManager.cpp \
+    AxisAndGrid/CLines.cpp \
+    AxisAndGrid/CLineManager.cpp \
+    AxisAndGrid/CSceneManager.cpp \
+    AxisAndGrid/CAxisManager.cpp \
+    AxisAndGrid/CGrid.cpp \
+    AxisAndGrid/CGridManager.cpp
 #LIBS += -L/usr/lib/x86_64-linux-gnu/ -lGL -lglut
 
 DISTFILES += \
     Shaders/basic.Frag \
-    Shaders/basic.vert
+    Shaders/basic.vert \
+    Shaders/lines.geo \
+    Shaders/lines.Frag \
+    Shaders/coord.frag \
+    Shaders/lines.vert \
+    Shaders/coord.vert

@@ -29,3 +29,8 @@ public:
         _a = b._a;
     }
 };
+
+struct vector4b
+{
+    unsigned short _r, _g, _b, _a;
+};

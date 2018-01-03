@@ -54,9 +54,10 @@
 #define pi 3.1415926
 
 CScene::CScene(int width, int height, QGLWidget *_widget)
+    : m_widget(_widget)
+    , m_sceneManager(new CSceneManager(this, m_widget))
 {
     setSceneRect(0, 0, width, height);
-    m_widget = _widget;
 
     CGraphicsWidget * widgetP = new CGraphicsWidget;
     ItemDialog* itemDialog = new ItemDialog;
@@ -95,6 +96,11 @@ CScene::CScene(int width, int height, QGLWidget *_widget)
 
 CScene::~CScene()
 {
+    this->cleanUp();
+}
+
+void CScene::cleanUp()
+{
 
 }
 
@@ -107,14 +113,9 @@ void CScene::drawBackground(QPainter *painter, const QRectF &)
 //    float timeuse;
 //    gettimeofday(&tpstart,NULL);
     painter->beginNativePainting();
-//    if(m_flagDraw)
-//    {
-    m_therenders.at(m_index)->bindShader();
-    m_therenders.at(m_index)->getShader()->setUniformValue(m_uniformIndexRotPntAnixGrids.at(m_index), m_rotations.at(m_index));
-//        drawAxis(m_index);
-        m_axis->draw();
-        m_therenders.at(m_index)->releaseShader();
-//    }
+
+    m_sceneManager->draw();
+
     painter->endNativePainting();
 //    double time_End = (double)::clock();
     /*gettimeofday(&tpend,NULL);
@@ -132,19 +133,7 @@ void CScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
     if(event->isAccepted())
         return;
-    if (event->button() == Qt::LeftButton)
-    {
-        m_leftPushDowns.at(m_index) = true;
-        m_mouseCordxs.at(m_index) = event->scenePos().x();
-        m_mouseCordys.at(m_index) = event->scenePos().y();
-    }
-    if (event->button() == Qt::RightButton)
-    {
-        m_rightPushDowns.at(m_index) = true;
-        m_mouseCordxs.at(m_index) = event->scenePos().x();
-        m_mouseCordys.at(m_index) = event->scenePos().y();
-    }
-
+    m_sceneManager->mousePressEvent(event);
 }
 
 void CScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -152,17 +141,8 @@ void CScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseMoveEvent(event);
     if(event->isAccepted())
         return;
-    if(0 == m_frameTypes.at(m_index))
-    {
-        if (m_leftPushDowns.at(m_index))
-        {
-            float _roatx = m_mouseCordxs.at(m_index) - event->scenePos().x();
-            float _roaty = m_mouseCordys.at(m_index) - event->scenePos().y();
-            m_mouseCordxs.at(m_index) = event->scenePos().x();
-            m_mouseCordys.at(m_index) = event->scenePos().y();
-            setRot(_roaty / 200,  _roatx/ 200/*,0*/);
-        }
-    }
+    m_sceneManager->mouseMoveEvent(event);
+    update();
 
 }
 
@@ -171,15 +151,7 @@ void CScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
     if(event->isAccepted())
         return;
-    if (event->button() == Qt::LeftButton)
-    {
-        m_leftPushDowns.at(m_index) = false;
-    }
-    if (event->button() == Qt::RightButton)
-    {
-        m_rightPushDowns.at(m_index) = false;
-    }
-
+    m_sceneManager->mouseReleaseEvent(event);
 }
 
 void CScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
@@ -187,77 +159,29 @@ void CScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseDoubleClickEvent(event);
     if(event->isAccepted())
         return;
-    if(m_index < 2)
-        m_index += 1;
-    else
-        m_index = 1;
-    m_axis->setCurrentIndex(m_index);
+    m_sceneManager->mouseDoubleClickEvent(event);
+}
 
+void CScene::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    QGraphicsScene::wheelEvent(event);
+    if(event->isAccepted())
+        return;
+    m_sceneManager->WheelEvent(event);
 }
 
 void CScene::initGL(u_short _index)
 {
     m_widget->makeCurrent();
     initializeOpenGLFunctions();
-    CVaoVboManager* vaovboManage = new CVaoVboManager;
-    vaovboManage->prepare();
-    if(!m_axis)
-    {
-        m_axis = new CAxis(vaovboManage, m_widget);
-        m_axis->setCurrentIndex(_index);
-        m_index = _index;
-    }
-    m_axis->createNewAxisForNewIndex(_index);
-
-    QMatrix4x4 m_rotation = {
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    };
-    m_rotations.insert(std::pair<u_short, QMatrix4x4>(_index, m_rotation));
-    bool m_leftPushDown = false;
-    bool m_rightPushDown = false;
-    int m_mouseCordx = 0;
-    int m_mouseCordy = 0;
-    u_char m_frameType = 0;
-    m_leftPushDowns.insert(std::pair<u_short, bool>(_index, m_leftPushDown));
-    m_rightPushDowns.insert(std::pair<u_short, bool>(_index, m_rightPushDown));
-    m_mouseCordxs.insert(std::pair<u_short, int>(_index, m_mouseCordx));
-    m_mouseCordys.insert(std::pair<u_short, int>(_index, m_mouseCordy));
-    m_frameTypes.insert(std::pair<u_short, u_char>(_index, m_frameType));
-
-
-    CRender* m_therender = new CRender;
-    m_therenders.insert(std::pair<u_short, CRender*>(_index, m_therender));
-    m_therender->prepare();
-
-
-    GLuint m_uniformIndexRotPntAnixGrid;
-    m_uniformIndexRotPntAnixGrid = m_therenders.at(_index)->getShader()->uniformLocation("rot");
-    m_uniformIndexRotPntAnixGrids.insert(std::pair<u_short, GLuint>(_index, m_uniformIndexRotPntAnixGrid));
-
-    m_therenders.at(_index)->bindShader();			//绑定着色器
-    m_therenders.at(_index)->getShader()->setUniformValue(m_uniformIndexRotPntAnixGrids.at(_index), m_rotations.at(_index));
-    m_therenders.at(_index)->releaseShader();        //解除着色器
-
+    m_sceneManager->initGL(_index);
+//    prepareAxis(_index);
 }
 
-void CScene::setRot(float _x, float _y)
+
+void CScene::addPoint(size_t _lineindex, const vector3f &_position)
 {
-    m_rotations.at(m_index) = QMatrix4x4(1.0, 0.0, 0.0, 0.0,
-                    0.0, cos(_x), -sin(_x), 0.0,
-                    0.0, sin(_x), cos(_x), 0.0,
-                        0.0, 0.0, 0.0, 1.0)*
-        QMatrix4x4(cos(_y), 0.0, sin(_y), 0.0,
-            0.0, 1.0, 0.0, 0.0,
-            -sin(_y), 0.0, cos(_y), 0.0,
-            0.0, 0.0, 0.0, 1.0)/**
-                QMatrix4x4(cos(_z), -sin(_z), 0.0, 0.0,
-                    sin(_z), cos(_z), 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0)*/*m_rotations.at(m_index);
-    update();
+
 }
 
 //void CScene::onRotationChanged(QMatrix4x4 _rotation)

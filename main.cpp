@@ -1,12 +1,5 @@
-//#include "CScene.h"
-
-//#include "CGraphicsView.h"
-#include "MVC/CMVCWidget.h"
 #include "LLComboWidget.h"
 #include "DataManage/CVaoVboManager.h"
-#include <map>
-#include <QtWidgets>
-#include <QGLWidget>
 #include <QHBoxLayout>
 #include <QGridLayout>
 
@@ -21,8 +14,6 @@ int main(int argc, char **argv)
         widget.createNewMVCWidget(i);
     }
     widget.show();
-
-
 
     return app.exec();
 }
