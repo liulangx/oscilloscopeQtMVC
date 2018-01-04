@@ -21,6 +21,8 @@ public:
     void setZoom(float _scale);
     void setDrawType(CGrid::DRAWTYPE _drawtype);
     void setCordi(vector2f _x, vector2f _y, vector2f _z);
+    void setForbbidenRot(bool _b);
+    void setRender();
     void draw();
 
     void adjustGridNumer(u_short _imgIndex, vector2f _xrange, vector2f _yrange, vector2f _zrange, CGrid::RangeChange _xRanChange, CGrid::RangeChange _yRanChange, CGrid::RangeChange _zRanChange);

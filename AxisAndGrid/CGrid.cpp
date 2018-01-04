@@ -78,15 +78,53 @@ void CGrid::setDrawGrid()
 void CGrid::setDrawTeture()
 {
     m_gridRender->bindShader();
-    m_gridRender->getShader()->setUniformValue(m_uniformIndexMoveAnixtexture, m_move);
-    m_gridRender->getShader()->setUniformValue(m_uniformIndexRotAnixtexture, m_rotation);
+    m_gridRender->getShader()->setUniformValue(m_uniformIndexDrawtypeAnixtexture, m_drawtype);
+    switch (m_drawtype)
+    {
+    case DRAWTYPE::XZY:
+        {
+            QMatrix4x4 tmpProjection = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            };
+            tmpProjection.perspective(12.0, 1, 5, 20);
+            m_gridRender->getShader()->setUniformValue(m_uniformIndexRotAnixtexture, m_rotation);
+            m_gridRender->getShader()->setUniformValue(m_uniformIndexMoveAnixtexture, m_move);
+            m_gridRender->getShader()->setUniformValue(m_uniformIndexProjectionAnixtexture, tmpProjection);
+        }
+        break;
+    default:
+        {
+            QMatrix4x4 tmpProjection = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            };
+            //tmpProjection.perspective(12.0, 1, 5, 20);
+            tmpProjection.ortho(-1.4f,1.4f,-1.4f,1.4f,-1.4f,1.4f);
+            m_gridRender->getShader()->setUniformValue(m_uniformIndexMoveAnixtexture, m_move);
+            m_gridRender->getShader()->setUniformValue(m_uniformIndexProjectionAnixtexture, tmpProjection);
+        }
+        break;
+    }
     m_gridRender->releaseShader();
+
+//    m_gridRender->bindShader();
+//    m_gridRender->getShader()->setUniformValue(m_uniformIndexMoveAnixtexture, m_move);
+//    m_gridRender->getShader()->setUniformValue(m_uniformIndexRotAnixtexture, m_rotation);
+//    m_gridRender->releaseShader();
 }
 
 void CGrid::setRotation(QMatrix4x4 _rotation)
 {
-    m_rotation = _rotation;
-    setInvertedRot();
+    if(!m_fobbidenRotAxisLab)
+    {
+        m_rotation = _rotation;
+        setInvertedRot();
+    }
 }
 
 void CGrid::setMove(QMatrix4x4 _move)
@@ -105,6 +143,26 @@ void CGrid::setZoom(float _scale)
     qDebug() << "yrange: " << yrange._y << " " << yrange._x;
     qDebug() << "zrange: " << zrange._y << " " << zrange._x;
     adjustGridNumber(xrange, yrange, zrange, CGrid::RangeChange::Change, CGrid::RangeChange::Change, CGrid::RangeChange::Change);
+}
+
+void CGrid::setRender()
+{
+    m_therender->bindShader();
+    m_therender->getShader()->setUniformValue(m_uniformIndexRotPntAnixGrid, m_rotation);
+    m_therender->getShader()->setUniformValue(m_uniformIndexMovePntAnixGrid, m_move);
+    m_therender->getShader()->setUniformValue(m_uniformIndexDrawtypePntAnixGrid, m_drawtype);
+    m_therender->releaseShader();
+
+    m_gridRender->bindShader();
+    m_gridRender->getShader()->setUniformValue(m_uniformIndexRotAnixtexture, m_rotation);
+    m_gridRender->getShader()->setUniformValue(m_uniformIndexMoveAnixtexture, m_move);
+    m_gridRender->getShader()->setUniformValue(m_uniformIndexDrawtypeAnixtexture, m_drawtype);
+    m_gridRender->releaseShader();
+}
+
+void CGrid::setForbbidenRot(bool _b)
+{
+    m_fobbidenRotAxisLab = _b;
 }
 
 void CGrid::adjustGridNumber(vector2f _x, vector2f _y, vector2f _z, CGrid::RangeChange xChange, CGrid::RangeChange yChange, CGrid::RangeChange zChange)

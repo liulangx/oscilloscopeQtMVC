@@ -20,7 +20,8 @@ HEADERS += \
     AxisAndGrid/CAxisManager.h \
     AxisAndGrid/CGrid.h \
     AxisAndGrid/CGridManager.h \
-    AxisAndGrid/textureindex.h
+    AxisAndGrid/textureindex.h \
+    InsertQtWin/CInsQtWinManager.h
 SOURCES += \
            main.cpp \
     LLComboWidget.cpp \
@@ -38,7 +39,8 @@ SOURCES += \
     AxisAndGrid/CSceneManager.cpp \
     AxisAndGrid/CAxisManager.cpp \
     AxisAndGrid/CGrid.cpp \
-    AxisAndGrid/CGridManager.cpp
+    AxisAndGrid/CGridManager.cpp \
+    InsertQtWin/CInsQtWinManager.cpp
 #LIBS += -L/usr/lib/x86_64-linux-gnu/ -lGL -lglut
 
 DISTFILES += \

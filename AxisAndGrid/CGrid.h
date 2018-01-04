@@ -37,6 +37,8 @@ public:
     void setRotation(QMatrix4x4 _rotation);
     void setMove(QMatrix4x4 _move);
     void setZoom(float _scale);
+    void setRender();
+    void setForbbidenRot(bool _b);
 
     void adjustGridNumber(vector2f _x, vector2f _y, vector2f _z, RangeChange xChange, RangeChange yChange, RangeChange zChange);
 
@@ -243,6 +245,8 @@ private:
     GLfloat                     m_zOffsetForDrawType = 0; // x,z
 
     GLboolean                   m_notCopyFromOtherOpenGLWidget = true;
+
+    GLboolean                   m_fobbidenRotAxisLab = false;
 };
 
 #endif // CGRID_H

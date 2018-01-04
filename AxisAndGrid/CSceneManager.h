@@ -30,6 +30,7 @@ public:
     void setMove(float _x, float _y);
     void setDrawType(CGrid::DRAWTYPE _drawtype);
     void addPoint(size_t _lineindex, const vector3f &_position);
+    void setCurrentShowIndex(u_short _index);
 
 //    void setRotation(u_short _index, QMatrix4x4 _rotation);
 

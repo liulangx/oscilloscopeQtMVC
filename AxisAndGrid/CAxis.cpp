@@ -362,6 +362,8 @@ void CAxis::genAxis(u_short _index)
 
     m_arrowpoint.push_back(m_x._x); m_arrowpoint.push_back(m_y._x); m_arrowpoint.push_back(m_z._y);
     m_arrowpoint.push_back(m_zcolor._r); m_arrowpoint.push_back(m_zcolor._g); m_arrowpoint.push_back(m_zcolor._b); m_arrowpoint.push_back(m_zcolor._a);
+    m_arrowIndexs.erase(_index);
+    m_arrowpoints.erase(_index);
     m_arrowIndexs.insert(std::pair<u_short, vector<GLuint>>(_index, m_arrowIndex));
     m_arrowpoints.insert(std::pair<u_short, vector<float>>(_index, m_arrowpoint));
 

@@ -39,6 +39,8 @@ void CMVCWidget::initGL()
 {
     m_scene->initGL(0);
     m_scene->initGL(1);
+    m_scene->initGL(2);
+
 //    m_scene->initGL(0);
 }
 

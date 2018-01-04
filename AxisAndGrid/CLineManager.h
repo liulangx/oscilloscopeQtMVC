@@ -32,6 +32,8 @@ public:
     void setRotation(u_short _imgIndex, QMatrix4x4 _rotation);
     void setMove(u_short _imgIndex, QMatrix4x4 _move);
     void setZoom(float _scale);
+    void setDrawtype(CGrid::DRAWTYPE _drawtype);
+    void setRender();
 private:
     u_short                    m_curIndex = 0;
     CVaoVboManager*              m_vaovboManager;

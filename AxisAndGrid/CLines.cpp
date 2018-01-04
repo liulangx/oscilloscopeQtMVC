@@ -590,6 +590,20 @@ void CLines::setZoom(float _scale)
     m_zoom *= _scale;
 }
 
+void CLines::setDrawtype(CGrid::DRAWTYPE _drawtype)
+{
+    m_drawtype = (CLines::DRAWTYPE) _drawtype;
+}
+
+void CLines::setRender()
+{
+    m_lineRender->bindShader();
+    m_lineRender->getShader()->setUniformValue(m_uniformIndexMovePntAnixGridForLines, m_move);
+    m_lineRender->getShader()->setUniformValue(m_uniformIndexRotPntAnixGridForLines, m_rotation);
+    m_lineRender->getShader()->setUniformValue(m_uniformIndexDrawtypePntAnixGridForLines, m_drawtype);
+    m_lineRender->releaseShader();
+}
+
 void CLines::setDraw()
 {
     m_lineRender->bindShader();
@@ -609,7 +623,6 @@ void CLines::setDraw()
                 };
                 tmpProjection.perspective(12.0, 1, 5, 20);
                 //tmpProjection.ortho(-1.4f,1.4f,-1.4f,1.4f,-1.4f,1.4f);
-
 
                 m_lineRender->getShader()->setUniformValue(m_uniformIndexRangeXPntAnixGridForLines, m_xRange._x, m_xRange._y);
                 m_lineRender->getShader()->setUniformValue(m_uniformIndexRangeYPntAnixGridForLines, m_yRange._x, m_yRange._y);

@@ -9,6 +9,7 @@
 #include "Shaders/CRender.h"
 #include "AxisAndGrid/CAxis.h"
 #include "AxisAndGrid/CSceneManager.h"
+#include "InsertQtWin/CInsQtWinManager.h"
 
 #include <GL/glu.h>
 #include <QTime>
@@ -37,7 +38,7 @@ public:
     void addPoint(size_t _lineindex, const vector3f &_position);
 public slots:
 //    void onRotationChanged(QMatrix4x4 _rotation);
-
+    void onNewItemTriggered(ItemDialog::ItemType _type, u_short _index);
 private:
     QGLWidget* m_widget;
 
@@ -48,6 +49,7 @@ private:
     void wheelEvent(QGraphicsSceneWheelEvent *event);
 
     CSceneManager* m_sceneManager;
+    CInsQtWinManager* m_insQtWinManager;
 };
 
 //#endif

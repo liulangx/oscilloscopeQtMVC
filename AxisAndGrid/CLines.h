@@ -50,6 +50,8 @@ public:
     void setRotation(QMatrix4x4 _rotation);
     void setMove(QMatrix4x4 _move);
     void setZoom(float _scale);
+    void setDrawtype(CGrid::DRAWTYPE _drawtype);
+    void setRender();
 
     void setDraw();
     void setXYPlaneOn();

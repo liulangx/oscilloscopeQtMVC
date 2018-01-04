@@ -130,11 +130,15 @@ void CSceneManager::setMove(float _x, float _y)
 void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
 {
     m_gridManager->setDrawType(_drawtype);
+    m_axisManager->setDrawType((CAxisManager::DRAWTYPE)(_drawtype));
+    m_lineManager->setDrawtype(_drawtype);
     //setCordi({ 0,1 }, { 0,1 }, {0,1});
     switch (_drawtype)
     {
         case CGrid::DRAWTYPE::XZY:
         {
+            m_gridManager->setCordi({ 0,1 }, { 0,1 }, {0,1});
+            m_axisManager->setCordi({ 0,1 }, { 0,1 }, {0,1});
             m_moves.at(m_index) = { 1,0,0,0,
                     0,1,0,0,
                     0,0,1,0,
@@ -145,17 +149,21 @@ void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
                     0,0,0,1 };
 //            m_gridManager->setRotation(m_index, m_rotations.at(m_index));
 //            m_gridManager->setMove(m_index, m_moves.at(m_index));
+            m_gridManager->setForbbidenRot(false);
             setMove(0, 0);
             setRot(0, 0);
+            m_gridManager->setRender();
+            m_axisManager->setRender();
+            m_lineManager->setRender();
 
-            m_gridManager->setCordi({ 0,1 }, { 0,1 }, {0,1});
 //            m_gridManager->setMove(m_index, m_moves.at(m_index));
 //            m_gridManager->setRotation(m_index, m_rotations.at(m_index));
             break;
         }
         case CGrid::DRAWTYPE::XY:
         {
-
+            m_gridManager->setCordi({ -0.9f,0.9f }, { -0.9f,0.9f }, { 0,1 });
+            m_axisManager->setCordi({ -0.9f,0.9f }, { -0.9f,0.9f }, { 0,1 });
             m_moves.at(m_index) = { 1,0,0,0,
                     0,1,0,0,
                     0,0,1,0,
@@ -166,16 +174,22 @@ void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
                     0,0,0,1 };
 //            m_gridManager->setRotation(m_index, m_rotations.at(m_index));
 //            m_gridManager->setMove(m_index, m_moves.at(m_index));
+            m_gridManager->setForbbidenRot(false);
             setRot(0, 0);
             setMove(-0.9, -0.9);
-            m_gridManager->setCordi({ -0.9f,0.9f }, { -0.9f,0.9f }, { 0,1 });
+            m_gridManager->setForbbidenRot(true);
+            m_gridManager->setRender();
+            m_axisManager->setRender();
+            m_lineManager->setRender();
 //            m_gridManager->setMove(m_index, m_moves.at(m_index));
 //            m_gridManager->setRotation(m_index, m_rotations.at(m_index));
             break;
+
         }
         case CGrid::DRAWTYPE::XZ:
         {
-
+            m_gridManager->setCordi({ -0.9f,0.9f }, { 0,1 }, { -0.9f,0.9f });
+            m_axisManager->setCordi({ -0.9f,0.9f }, { 0,1 }, { -0.9f,0.9f });
             m_moves.at(m_index) = { 1,0,0,0,
                     0,1,0,0,
                     0,0,1,0,
@@ -186,14 +200,19 @@ void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
                     0,0,0,1 };
 //            m_gridManager->setRotation(m_index, m_rotations.at(m_index));
 //            m_gridManager->setMove(m_index, m_moves.at(m_index));
+            m_gridManager->setForbbidenRot(false);
             setRot(-pi/2, 0);
             setMove(-0.9, -0.9);
-            m_gridManager->setCordi({ -0.9f,0.9f }, { 0,1 }, { -0.9f,0.9f });
+            m_gridManager->setForbbidenRot(true);
+            m_gridManager->setRender();
+            m_axisManager->setRender();
+            m_lineManager->setRender();
             break;
         }
         case CGrid::DRAWTYPE::YZ:
         {
-
+            m_gridManager->setCordi({ 0,1 }, { -0.9f,0.9f }, { -0.9f,0.9f });
+            m_axisManager->setCordi({ 0,1 }, { -0.9f,0.9f }, { -0.9f,0.9f });
             m_moves.at(m_index) = { 1,0,0,0,
                     0,1,0,0,
                     0,0,1,0,
@@ -204,9 +223,13 @@ void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
                     0,0,0,1 };
 //            m_gridManager->setRotation(m_index, m_rotations.at(m_index));
 //            m_gridManager->setMove(m_index, m_moves.at(m_index));
+            m_gridManager->setForbbidenRot(false);
             setRot(0, pi/2);
             setMove(-0.9, -0.9);
-            m_gridManager->setCordi({ 0,1 }, { -0.9f,0.9f }, { -0.9f,0.9f });
+            m_gridManager->setForbbidenRot(true);
+            m_gridManager->setRender();
+            m_axisManager->setRender();
+            m_lineManager->setRender();
             break;
         }
     }
@@ -219,6 +242,15 @@ void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
 void CSceneManager::addPoint(size_t _lineindex, const vector3f &_position)
 {
 
+}
+
+void CSceneManager::setCurrentShowIndex(u_short _index)
+{
+    m_index = _index;
+    m_axisManager->setCurIndex(m_index);
+    //m_axis->setCurrentIndex(m_index);
+    m_lineManager->setCurIndex(m_index);
+    m_gridManager->setCurIndex(m_index);
 }
 
 

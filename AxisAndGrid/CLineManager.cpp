@@ -115,3 +115,13 @@ void CLineManager::setZoom(float _scale)
 {
     m_mapIdx_Lines.at(m_curIndex)->setZoom(_scale);
 }
+
+void CLineManager::setDrawtype(CGrid::DRAWTYPE _drawtype)
+{
+    m_mapIdx_Lines.at(m_curIndex)->setDrawtype(_drawtype);
+}
+
+void CLineManager::setRender()
+{
+    m_mapIdx_Lines.at(m_curIndex)->setRender();
+}

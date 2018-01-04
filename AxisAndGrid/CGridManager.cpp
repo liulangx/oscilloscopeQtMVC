@@ -59,6 +59,16 @@ void CGridManager::setCordi(vector2f _x, vector2f _y, vector2f _z)
     m_grids.at(m_curIndex)->setCordi(_x, _y, _z);
 }
 
+void CGridManager::setForbbidenRot(bool _b)
+{
+    m_grids.at(m_curIndex)->setForbbidenRot(_b);
+}
+
+void CGridManager::setRender()
+{
+    m_grids.at(m_curIndex)->setRender();
+}
+
 void CGridManager::draw()
 {
     m_grids.at(m_curIndex)->draw();

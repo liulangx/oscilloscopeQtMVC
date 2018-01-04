@@ -23,6 +23,7 @@ void CTwoSidedGraphicsWidget::setWidget(int index, QWidget *widget)
 
     CGraphicsWidget *proxy = new CGraphicsWidget;
     proxy->setWidget(widget);
+//    QRectF geo1 = proxy->geometry();
 
     if (m_proxyWidgets[index])
         delete m_proxyWidgets[index];

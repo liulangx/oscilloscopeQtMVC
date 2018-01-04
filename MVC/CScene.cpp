@@ -56,42 +56,9 @@
 CScene::CScene(int width, int height, QGLWidget *_widget)
     : m_widget(_widget)
     , m_sceneManager(new CSceneManager(this, m_widget))
+    , m_insQtWinManager(new CInsQtWinManager(this))
 {
     setSceneRect(0, 0, width, height);
-
-    CGraphicsWidget * widgetP = new CGraphicsWidget;
-    ItemDialog* itemDialog = new ItemDialog;
-//    widgetP->setCacheMode(QGraphicsItem::ItemCoordinateCache);
-//    widgetP->setZValue(1e30);
-//    widgetP->setWidget(itemDialog);
-    itemDialog->move(100, 160);
-    itemDialog->resize(itemDialog->sizeHint());
-    itemDialog->setWindowTitle("This is a test");
-//    widgetP->setVisible(true);
-
-    ItemDialog* itemDialog1 = new ItemDialog;
-
-
-    CTwoSidedGraphicsWidget *twoSided = new CTwoSidedGraphicsWidget(this);
-    twoSided->setWidget(0, itemDialog);
-    twoSided->setWidget(1, itemDialog1);
-    CTwoSidedGraphicsWidget *twoSided1 = new CTwoSidedGraphicsWidget(this);
-
-
-    ItemDialog* itemDialog2 = new ItemDialog;
-    ItemDialog* itemDialog3 = new ItemDialog;
-    twoSided1->setWidget(0, itemDialog2);
-    twoSided1->setWidget(1, itemDialog3);
-    itemDialog2->move(300, 160);
-    itemDialog2->resize(itemDialog2->sizeHint());
-
-
-    connect(itemDialog, SIGNAL(doubleClicked()), twoSided, SLOT(flip()));
-    connect(itemDialog1, SIGNAL(doubleClicked()), twoSided, SLOT(flip()));
-    connect(itemDialog2, SIGNAL(doubleClicked()), twoSided1, SLOT(flip()));
-    connect(itemDialog3, SIGNAL(doubleClicked()), twoSided1, SLOT(flip()));
-//    this->addItem(widgetP);
-
 }
 
 CScene::~CScene()
@@ -175,6 +142,7 @@ void CScene::initGL(u_short _index)
     m_widget->makeCurrent();
     initializeOpenGLFunctions();
     m_sceneManager->initGL(_index);
+    m_insQtWinManager->initGL(_index);
 //    prepareAxis(_index);
 }
 
@@ -182,6 +150,19 @@ void CScene::initGL(u_short _index)
 void CScene::addPoint(size_t _lineindex, const vector3f &_position)
 {
 
+}
+
+void CScene::onNewItemTriggered(ItemDialog::ItemType _type, u_short _index)
+{
+    switch (_type) {
+    case ItemDialog::ItemType::MakeCurrent:
+    {
+        m_sceneManager->setCurrentShowIndex(_index);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 //void CScene::onRotationChanged(QMatrix4x4 _rotation)
