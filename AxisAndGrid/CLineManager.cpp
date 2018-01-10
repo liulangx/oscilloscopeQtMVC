@@ -18,7 +18,11 @@ CLineManager::~CLineManager()
 
 void CLineManager::cleanUp()
 {
-
+    for(map<u_short, CLines*>::iterator it = m_mapIdx_Lines.begin(); it != m_mapIdx_Lines.end(); ++it)
+    {
+        LLDELETE(it->second);
+    }
+    m_mapIdx_Lines.clear();
 }
 
 void CLineManager::initial()
@@ -86,8 +90,13 @@ bool CLineManager::addPoint(u_short _imgIndex, size_t _lineindex, const vector3f
     {
         createNewLineForNewIndex(_imgIndex);
     }
-    m_mapIdx_Lines.at(_imgIndex)->addPoint(_lineindex, _position);
-    return true;
+    //m_mapIdx_Lines.at(_imgIndex)->addPoint(_lineindex, _position);
+    return m_mapIdx_Lines.at(_imgIndex)->addPoint(_lineindex, _position);
+}
+
+void CLineManager::setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color)
+{
+    m_mapIdx_Lines.at(_imgIndex)->setColor(_lineIndex, _color);
 }
 
 
@@ -124,4 +133,19 @@ void CLineManager::setDrawtype(CGrid::DRAWTYPE _drawtype)
 void CLineManager::setRender()
 {
     m_mapIdx_Lines.at(m_curIndex)->setRender();
+}
+
+void CLineManager::setXYHideOrShow(u_short _index)
+{
+    m_mapIdx_Lines.at(_index)->setXYPlaneOn();
+}
+
+void CLineManager::setXZHideOrShow(u_short _index)
+{
+    m_mapIdx_Lines.at(_index)->setXZPlaneOn();
+}
+
+void CLineManager::setYZHideOrShow(u_short _index)
+{
+    m_mapIdx_Lines.at(_index)->setYZPlaneOn();
 }

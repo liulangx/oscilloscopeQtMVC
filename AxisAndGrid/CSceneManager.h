@@ -17,6 +17,8 @@ class CSceneManager : public QObject, public QOpenGLFunctions_4_3_Core
     Q_OBJECT
 public:
     explicit CSceneManager(CScene* _mvcWidget, QGLWidget* _widget);
+    ~CSceneManager();
+    void cleanUp();
     //初始化
     void initGL(u_short _index);
     void prepareDataForEachImg(u_short _index);
@@ -29,9 +31,15 @@ public:
     void setRot(float _x, float _y);
     void setMove(float _x, float _y);
     void setDrawType(CGrid::DRAWTYPE _drawtype);
-    void addPoint(size_t _lineindex, const vector3f &_position);
-    void setCurrentShowIndex(u_short _index);
+    bool addPoint(u_short _imgIndex, size_t _lineindex, const vector3f &_position);
+    void setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color);
 
+    void setCurrentShowIndex(u_short _index);
+    void setAxisHideOrShow(u_short _index);
+    void setGridHideOrShow(u_short _index);
+    void setXYHideOrShow(u_short _index);
+    void setXZHideOrShow(u_short _index);
+    void setYZHideOrShow(u_short _index);
 //    void setRotation(u_short _index, QMatrix4x4 _rotation);
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -66,11 +74,11 @@ private:
     map<u_short, int>		m_mouseCordys/* = 0*/;			//左键鼠标位置y
     map<u_short, u_char> m_frameTypes/* = 0*/;
 //    CAxis*    m_axis;
-    CAxisManager*  m_axisManager;
-    CLineManager*  m_lineManager;
-    CGridManager*   m_gridManager;
-    QGLWidget* m_glwidget;
-    CVaoVboManager* m_vaovboManager;
+    CAxisManager*  m_axisManager = nullptr;
+    CLineManager*  m_lineManager = nullptr;
+    CGridManager*   m_gridManager = nullptr;
+    QGLWidget* m_glwidget = nullptr;
+    CVaoVboManager* m_vaovboManager = nullptr;
 };
 
 #endif // CSCENEMANAGER_H

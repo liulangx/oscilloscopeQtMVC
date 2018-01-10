@@ -27,10 +27,12 @@ ItemDialog::ItemDialog(CInsQtWinManager *_insQtWinManager, u_short _index, QStri
     QObject::connect(m_buttonMakeCur, SIGNAL(clicked(bool)), this, SLOT(triggerMakeCurrent()));
 
     m_buttonGrid = new QCheckBox(tr("网格"));
+    m_buttonGrid->setChecked(true);
     m_hlayout1->addWidget(m_buttonGrid);
     QObject::connect(m_buttonGrid, SIGNAL(stateChanged(int)), this, SLOT(triggerHoVGrid()));
 
     m_buttonAxis = new QCheckBox(tr("坐标"));
+    m_buttonAxis->setChecked(true);
     m_hlayout1->addWidget(m_buttonAxis);
     QObject::connect(m_buttonAxis, SIGNAL(stateChanged(int)), this, SLOT(triggerHoVAxis()));
 
@@ -38,14 +40,17 @@ ItemDialog::ItemDialog(CInsQtWinManager *_insQtWinManager, u_short _index, QStri
     m_hlayout1->setAlignment(Qt::AlignHCenter);
 
     m_buttonXY = new QCheckBox(tr("XY"));
+    m_buttonXY->setChecked(false);
     m_hlayout2->addWidget(m_buttonXY);
     QObject::connect(m_buttonXY, SIGNAL(stateChanged(int)), this, SLOT(triggerHoVXY()));
 
     m_buttonXZ = new QCheckBox(tr("XZ"));
+    m_buttonXZ->setChecked(false);
     m_hlayout2->addWidget(m_buttonXZ);
     QObject::connect(m_buttonXZ, SIGNAL(stateChanged(int)), this, SLOT(triggerHoVXZ()));
 
     m_buttonYZ = new QCheckBox(tr("YZ"));
+    m_buttonYZ->setChecked(false);
     m_hlayout2->addWidget(m_buttonYZ);
     QObject::connect(m_buttonYZ, SIGNAL(stateChanged(int)), this, SLOT(triggerHoVYZ()));
 

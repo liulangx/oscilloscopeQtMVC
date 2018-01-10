@@ -9,6 +9,18 @@ CSceneManager::CSceneManager(CScene *_mvcWidget, QGLWidget *_widget)
     QObject::connect(this, SIGNAL(update()), qobject_cast<CScene*>(this->parent()), SLOT(update()));
 }
 
+CSceneManager::~CSceneManager()
+{
+    this->cleanUp();
+}
+
+void CSceneManager::cleanUp()
+{
+    LLDELETE(m_gridManager);
+    LLDELETE(m_axisManager);
+    LLDELETE(m_lineManager);
+}
+
 void CSceneManager::initGL(u_short _index)
 {
     m_vaovboManager->prepare();
@@ -50,9 +62,12 @@ void CSceneManager::prepareDataForEachImg(u_short _index)
 
 void CSceneManager::draw()
 {
-    m_axisManager->draw();
-    m_lineManager->draw();
-    m_gridManager->draw();
+    if(m_axisManager)
+        m_axisManager->draw();
+    if(m_lineManager)
+        m_lineManager->draw();
+    if(m_gridManager)
+        m_gridManager->draw();
 }
 
 void CSceneManager::prepareAxis(u_short _index)
@@ -72,18 +87,7 @@ void CSceneManager::prepareLine(u_short _index)
         m_lineManager = new CLineManager(this, m_vaovboManager, m_glwidget);
         m_lineManager->setCurIndex(_index);
     }
-    vector3f position = {0, 0, 0};
-//    for(int j(0); j < 100; ++j)
-//    {
-        for(int i(0); i < 100; ++i)
-        {
-            position._y = /*j / 200.0 +*/ 0.5 * sin(i / 100.0);
-            position._z = cos(i / 100.0);
-            position._x = i / 100.0;
-            m_lineManager->addPoint(_index, 0, position);
-        }
-//    }
-        m_lineManager->createNewLineForNewIndex(_index);
+    m_lineManager->createNewLineForNewIndex(_index);
 }
 
 void CSceneManager::prepareGrid(u_short _index)
@@ -239,9 +243,14 @@ void CSceneManager::setDrawType(CGrid::DRAWTYPE _drawtype)
 
 }
 
-void CSceneManager::addPoint(size_t _lineindex, const vector3f &_position)
+bool CSceneManager::addPoint(u_short _imgIndex, size_t _lineindex, const vector3f &_position)
 {
+    return m_lineManager->addPoint(_imgIndex, _lineindex, _position);
+}
 
+void CSceneManager::setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color)
+{
+    m_lineManager->setColor(_imgIndex, _lineIndex, _color);
 }
 
 void CSceneManager::setCurrentShowIndex(u_short _index)
@@ -251,6 +260,31 @@ void CSceneManager::setCurrentShowIndex(u_short _index)
     //m_axis->setCurrentIndex(m_index);
     m_lineManager->setCurIndex(m_index);
     m_gridManager->setCurIndex(m_index);
+}
+
+void CSceneManager::setAxisHideOrShow(u_short _index)
+{
+    m_gridManager->setAxisLabelOnOrOff(_index);
+}
+
+void CSceneManager::setGridHideOrShow(u_short _index)
+{
+    m_gridManager->setGridOnOrOff(_index);
+}
+
+void CSceneManager::setXYHideOrShow(u_short _index)
+{
+    m_lineManager->setXYHideOrShow(_index);
+}
+
+void CSceneManager::setXZHideOrShow(u_short _index)
+{
+    m_lineManager->setXZHideOrShow(_index);
+}
+
+void CSceneManager::setYZHideOrShow(u_short _index)
+{
+    m_lineManager->setYZHideOrShow(_index);
 }
 
 
@@ -309,17 +343,17 @@ void CSceneManager::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void CSceneManager::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        if(m_index < 1)
-            m_index += 1;
-        else
-            m_index = 0;
-        m_axisManager->setCurIndex(m_index);
-        //m_axis->setCurrentIndex(m_index);
-        m_lineManager->setCurIndex(m_index);
-        m_gridManager->setCurIndex(m_index);
-    }
+//    if(event->button() == Qt::LeftButton)
+//    {
+//        if(m_index < 1)
+//            m_index += 1;
+//        else
+//            m_index = 0;
+//        m_axisManager->setCurIndex(m_index);
+//        //m_axis->setCurrentIndex(m_index);
+//        m_lineManager->setCurIndex(m_index);
+//        m_gridManager->setCurIndex(m_index);
+//    }
     if(event->button() == Qt::RightButton)
     {
         if(m_drawtype != CGrid::DRAWTYPE::YZ)
@@ -356,7 +390,4 @@ void CSceneManager::WheelEvent(QGraphicsSceneWheelEvent *event)
 void CSceneManager::onAdjustGridNumer(u_short _imgIndex, vector2f _xrange, vector2f _yrange, vector2f _zrange, CGrid::RangeChange _xRanChange, CGrid::RangeChange _yRanChange, CGrid::RangeChange _zRanChange)
 {
     m_gridManager->adjustGridNumer(_imgIndex, _xrange, _yrange, _zrange, _xRanChange, _yRanChange, _zRanChange);
-
-    int a;
-    qDebug() << "this is a test" << endl;
 }

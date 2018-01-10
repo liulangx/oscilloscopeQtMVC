@@ -15,6 +15,9 @@ public:
 
 
     void initGL();
+    void initGL(u_short _imgIndex);
+    bool addPoint(u_short _imgIndex, size_t _lineIndex, const vector3f &_position);
+    void setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color);
     void update();
 signals:
 //    void rotationChanged(QMatrix4x4 _rotation); //给模型层发送旋转矩阵改变的信号

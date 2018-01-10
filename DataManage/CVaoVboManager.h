@@ -15,6 +15,8 @@ public:
     GLuint allocVAO(QGLWidget* _widget);
     GLuint allocVBO(QGLWidget* _widget);
     void delVAOVBO(QGLWidget*_widget);
+    void delVAO(QGLWidget *_widget, GLuint _vao);
+    void delVBO(QGLWidget *_widget, GLuint _vbo);
 private:
     map<QGLWidget*, vector<GLuint>> m_mapVaos;
     map<QGLWidget*, vector<GLuint>> m_mapVbos;

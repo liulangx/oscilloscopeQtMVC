@@ -11,8 +11,11 @@ CAxisManager::~CAxisManager()
 {
     for(map<u_short, CRender*>::iterator it = m_therenders.begin(); it != m_therenders.end(); ++it)
     {
-        delete it->second;
+        LLDELETE(it->second);
+//        delete it->second;
     }
+    m_therenders.clear();
+    LLDELETE(m_axis);
 }
 
 void CAxisManager::initial()

@@ -21,7 +21,10 @@ HEADERS += \
     AxisAndGrid/CGrid.h \
     AxisAndGrid/CGridManager.h \
     AxisAndGrid/textureindex.h \
-    InsertQtWin/CInsQtWinManager.h
+    InsertQtWin/CInsQtWinManager.h \
+    UDPServer/CAsioAsyncServer.h \
+    tools.h \
+    mainwindow.h
 SOURCES += \
            main.cpp \
     LLComboWidget.cpp \
@@ -40,8 +43,13 @@ SOURCES += \
     AxisAndGrid/CAxisManager.cpp \
     AxisAndGrid/CGrid.cpp \
     AxisAndGrid/CGridManager.cpp \
-    InsertQtWin/CInsQtWinManager.cpp
+    InsertQtWin/CInsQtWinManager.cpp \
+    UDPServer/CAsioAsyncServer.cpp \
+    mainwindow.cpp
+
 #LIBS += -L/usr/lib/x86_64-linux-gnu/ -lGL -lglut
+FORMS += \
+        ui/mainwindow.ui
 
 DISTFILES += \
     Shaders/basic.Frag \
@@ -51,3 +59,6 @@ DISTFILES += \
     Shaders/coord.frag \
     Shaders/lines.vert \
     Shaders/coord.vert
+
+INCLUDEPATH +=/usr/include
+LIBS += /usr/lib/x86_64-linux-gnu/libboost_system.so /usr/lib/x86_64-linux-gnu/libboost_thread.so

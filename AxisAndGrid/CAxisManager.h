@@ -3,6 +3,7 @@
 #include "Shaders/CRender.h"
 #include "DataManage/CVaoVboManager.h"
 #include "CAxis.h"
+#include "tools.h"
 #include <QGLWidget>
 #include <QOpenGLFunctions_4_3_Core>
 #include <map>
@@ -37,8 +38,8 @@ private:
 //        0, 0, 0, 1
 //    };
     u_short m_curIndex = 0;
-    CVaoVboManager* m_vaovboManager;
-    QGLWidget*  m_glwidget;
+    CVaoVboManager* m_vaovboManager = nullptr;
+    QGLWidget*  m_glwidget = nullptr;
     map<u_short, CRender*>                      m_therenders;
     map<u_short, GLuint>						m_uniformIndexChoosePntAnixGrids;
     map<u_short, GLuint>						m_uniformIndexRotPntAnixGrids;

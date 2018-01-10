@@ -19,6 +19,21 @@ CGrid::CGrid(CVaoVboManager *_vaovboManager, QGLWidget *_widget)
     initial();
 }
 
+CGrid::~CGrid()
+{
+    this->cleanUp();
+}
+
+void CGrid::cleanUp()
+{
+    LLDELETE(m_textureDgt);
+    LLDELETE(m_textureLabel);
+    LLDELETE(m_textureMinus);
+    LLDELETE(m_texturePnt);
+    LLDELETE(m_gridRender);
+    LLDELETE(m_therender);
+}
+
 void CGrid::draw()
 {
     m_glWidget->makeCurrent();
@@ -138,10 +153,10 @@ void CGrid::setZoom(float _scale)
     vector2f xrange = {m_xRange._y + (m_xRange._x - m_xRange._y) / _scale, m_xRange._y};
     vector2f yrange = {m_yRange._y + (m_yRange._x - m_yRange._y) / _scale, m_yRange._y};
     vector2f zrange = {m_zRange._y + (m_zRange._x - m_zRange._y) / _scale, m_zRange._y};
-    qDebug() << "m_zoom: " << m_zoom;
-    qDebug() << "xrange: " << xrange._y << " " << xrange._x;
-    qDebug() << "yrange: " << yrange._y << " " << yrange._x;
-    qDebug() << "zrange: " << zrange._y << " " << zrange._x;
+//    qDebug() << "m_zoom: " << m_zoom;
+//    qDebug() << "xrange: " << xrange._y << " " << xrange._x;
+//    qDebug() << "yrange: " << yrange._y << " " << yrange._x;
+//    qDebug() << "zrange: " << zrange._y << " " << zrange._x;
     adjustGridNumber(xrange, yrange, zrange, CGrid::RangeChange::Change, CGrid::RangeChange::Change, CGrid::RangeChange::Change);
 }
 
@@ -261,6 +276,20 @@ void CGrid::setGridOn()
     createAndUpdateGrid();
 }
 
+void CGrid::setGridOnOrOff()
+{
+    if(m_gridOn)
+    {
+        m_gridOn = false;
+        createAndUpdateGrid();
+    }
+    else
+    {
+        m_gridOn = true;
+        createAndUpdateGrid();
+    }
+}
+
 void CGrid::setAnixLabelOff()
 {
     m_anixLabelOn = false;
@@ -271,6 +300,20 @@ void CGrid::setAnixLabelOn()
 {
     m_anixLabelOn = true;
     createAndUpdateAnixnumberWithPnt();
+}
+
+void CGrid::setAnixLabelOnOrOff()
+{
+    if(m_anixLabelOn)
+    {
+        m_anixLabelOn = false;
+        createAndUpdateAnixnumberWithPnt();
+    }
+    else
+    {
+        m_anixLabelOn = true;
+        createAndUpdateAnixnumberWithPnt();
+    }
 }
 
 void CGrid::setDrawType(DRAWTYPE drawtype)

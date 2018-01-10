@@ -4,6 +4,7 @@
 #include "DataManage/CVaoVboManager.h"
 #include "AxisAndGrid/CGrid.h"
 #include "Shaders/CRender.h"
+#include "tools.h"
 #include <QGLShader>
 #include <QGLShaderProgram>
 #include <QMessageBox>
@@ -33,11 +34,12 @@ public:
     explicit CLines(QObject* _lineManager, u_short _imgIndex, CVaoVboManager* _vaovboManager, QGLWidget* _widget);
     ~CLines();
 
+    void cleanUp();
     void initial();
     void initialRender();
     void createNewLineForSameImg(size_t _lineIndex, size_t _pointSize);
     //setRenderParam 在initial执行后立刻调用，为了能在draw阶段使用geometry shader
-    void setRenderParam(GLuint _uniformIndexXyPlaneMarkForLines, GLuint _uniformIndexXzPlaneMarkForLines, GLuint _uniformIndexYzPlaneMarkForLines, GLuint _uniformIndexXLowerForLines, GLuint _uniformIndexYLowerForLines, GLuint _uniformIndexZLowerForLines);
+    void setRenderParam(GLuint _uniformIndexXyPlaneMarkForLines, GLuint _uniformIndexXzPlaneMarkForLines, GLuint _uniformIndexYzPlaneMarkForLines, GLuint _uniformIndexXLowerForLines, GLuint _uniformIndexYLowerForLines, GLuint _uniformIndexZLowerForLines); //// deprecated!
     void draw();
     void clearUp();
     void setColor(size_t _lineIndex, vector4f _color);
@@ -142,8 +144,8 @@ private:
     CGrid::RangeChange  m_yRanChange = CGrid::RangeChange::NotChange;
     CGrid::RangeChange  m_zRanChange = CGrid::RangeChange::NotChange;
 
-    CVaoVboManager* m_vaovboManager;
-    CRender* m_lineRender;
+    CVaoVboManager* m_vaovboManager = nullptr;
+    CRender* m_lineRender = nullptr;
     u_short m_imgIndex = 0;
 };
 

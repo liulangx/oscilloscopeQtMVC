@@ -19,14 +19,18 @@ CLines::CLines(QObject *_lineManager, u_short _imgIndex, CVaoVboManager *_vaovbo
 
 CLines::~CLines()
 {
+    this->cleanUp();
+}
 
+void CLines::cleanUp()
+{
+    LLDELETE(m_lineRender);
 }
 
 void CLines::initial()
 {
     initializeOpenGLFunctions();
     initialRender();
-
 }
 
 void CLines::initialRender()
@@ -137,12 +141,16 @@ void CLines::draw()
     setDraw();
     m_glwidget->makeCurrent();
     m_lineRender->bindShader();
-    m_lineRender->getShader()->setUniformValue(m_uniformIndexXyPlaneMarkForLines, false);
-    m_lineRender->getShader()->setUniformValue(m_uniformIndexXzPlaneMarkForLines, false);
-    m_lineRender->getShader()->setUniformValue(m_uniformIndexYzPlaneMarkForLines, false);
+
+    size_t lineIndex = 0;
     for(map<size_t, GLuint>::iterator it = m_vaos.begin(); it != m_vaos.end(); ++it)
     {
-        m_glwidget->makeCurrent();
+        lineIndex = it->first;
+        m_lineRender->getShader()->setUniformValue(m_uniformIndexLineColorPntAnixGridForLines, m_colors.at(lineIndex)._r, m_colors.at(lineIndex)._g, m_colors.at(lineIndex)._b, m_colors.at(lineIndex)._a);
+        m_lineRender->getShader()->setUniformValue(m_uniformIndexXyPlaneMarkForLines, false);
+        m_lineRender->getShader()->setUniformValue(m_uniformIndexXzPlaneMarkForLines, false);
+        m_lineRender->getShader()->setUniformValue(m_uniformIndexYzPlaneMarkForLines, false);
+        //m_glwidget->makeCurrent();
         size_t lineIndex = it->first;
         GLuint vao = it->second;
         glBindVertexArray(vao);
@@ -538,6 +546,7 @@ bool CLines::addPoint(size_t _lineindex, const vector3f &_position)
         m_yRanChange = CGrid::RangeChange::NotChange;
         m_zRanChange = CGrid::RangeChange::NotChange;
     }
+    return createLineMark;
 }
 
 size_t CLines::addLine(size_t _lineIndex, size_t _pointSize)
@@ -608,6 +617,7 @@ void CLines::setDraw()
 {
     m_lineRender->bindShader();
     m_lineRender->getShader()->setUniformValue(m_uniformIndexDrawtypePntAnixGridForLines, m_drawtype);
+
     switch (m_drawtype)
     {
     case XZY:

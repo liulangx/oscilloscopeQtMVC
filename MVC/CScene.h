@@ -35,7 +35,8 @@ public:
     void cleanUp();
     void drawBackground(QPainter *painter, const QRectF &rect) override;
     void initGL(u_short _index);
-    void addPoint(size_t _lineindex, const vector3f &_position);
+    bool addPoint(u_short _imgIndex, size_t _lineindex, const vector3f &_position);
+    void setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color);
 public slots:
 //    void onRotationChanged(QMatrix4x4 _rotation);
     void onNewItemTriggered(ItemDialog::ItemType _type, u_short _index);

@@ -26,12 +26,18 @@ public:
     void draw();
 
     void adjustGridNumer(u_short _imgIndex, vector2f _xrange, vector2f _yrange, vector2f _zrange, CGrid::RangeChange _xRanChange, CGrid::RangeChange _yRanChange, CGrid::RangeChange _zRanChange);
+    void setAxisLabelOnOrOff(u_short _index);
+    void setGridOnOrOff(u_short _index);
 private:
     void initial();
     u_short                    m_curIndex = 0;
-    CVaoVboManager*              m_vaovboManager;
-    QGLWidget*                  m_glwidget;
+    CVaoVboManager*              m_vaovboManager = nullptr;
+    QGLWidget*                  m_glwidget = nullptr;
     map<u_short, CGrid*>         m_grids;
+    //开关
+    GLboolean                   m_gridOn = true;
+    GLboolean                   m_axisLabelOn = true;
+    GLboolean                   m_axisLabelNotEmpty = true;
 };
 
 #endif // CGRIDMANAGER_H

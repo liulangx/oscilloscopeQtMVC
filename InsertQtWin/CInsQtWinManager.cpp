@@ -41,6 +41,11 @@ CInsQtWinManager::CInsQtWinManager(CScene *_scene)
 
 CInsQtWinManager::~CInsQtWinManager()
 {
+    this->cleanUp();
+}
+
+void CInsQtWinManager::cleanUp()
+{
 
 }
 
@@ -59,6 +64,7 @@ void CInsQtWinManager::initGL(u_short _index)
     QString title = QString("图像 %1").arg(_index);
     ItemDialog* itemDialog = new ItemDialog(this, _index, title);
     itemDialog->setWindowTitle(title);
+    itemDialog->setWindowFlags(itemDialog->windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 //    itemDialog->resize(itemDialog->sizeHint());
 
 //    itemDialog->setWindowFlag(Qt::FramelessWindowHint);

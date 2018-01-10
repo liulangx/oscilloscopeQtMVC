@@ -30,8 +30,8 @@ private:
     void updateAxisBuffer(u_short _index);
     void genAxis(u_short _index);     //生成坐标轴和箭头buffer(参数为坐标线位置)
 private:
-    CVaoVboManager*              m_vaovboManager;
-    QGLWidget*                  m_glwidget;
+    CVaoVboManager*              m_vaovboManager = nullptr;
+    QGLWidget*                  m_glwidget = nullptr;
 
     u_short m_index = 0;
     map<u_short, vector3uint>       m_mapIdx_BufIdx;

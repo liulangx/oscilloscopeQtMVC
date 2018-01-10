@@ -41,7 +41,7 @@ void CAxis::draw()
 
 void CAxis::clearUp()
 {
-    m_vaovboManager->delVAOVBO(m_glwidget);
+//    m_vaovboManager->delVAOVBO(m_glwidget, m_vaos.at());
 }
 
 void CAxis::setCordi(vector2f _x, vector2f _y, vector2f _z)

@@ -13,6 +13,7 @@ class CInsQtWinManager : public QObject
 public:
     /*explicit */CInsQtWinManager(CScene* _scene);
     ~CInsQtWinManager();
+    void cleanUp();
     void initGL(u_short _index);
 private:
     map<u_short, ItemDialog*> m_itemDialogs;

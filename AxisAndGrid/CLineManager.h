@@ -26,6 +26,7 @@ public:
     void initial();
     void createNewLineForNewIndex(u_short _imgIndex);
     bool addPoint(u_short _imgIndex, size_t _lineindex, const vector3f & _position);
+    void setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color);
 //    void setDraw(u_short _imgIndex);
     void draw();
     void setCurIndex(u_short _curIndex);
@@ -34,10 +35,13 @@ public:
     void setZoom(float _scale);
     void setDrawtype(CGrid::DRAWTYPE _drawtype);
     void setRender();
+    void setXYHideOrShow(u_short _index);
+    void setXZHideOrShow(u_short _index);
+    void setYZHideOrShow(u_short _index);
 private:
     u_short                    m_curIndex = 0;
-    CVaoVboManager*              m_vaovboManager;
-    QGLWidget*                  m_glwidget;
+    CVaoVboManager*              m_vaovboManager = nullptr;
+    QGLWidget*                  m_glwidget = nullptr;
 //    CSceneManager*              m_sceneManger;
 
     map<u_short, CLines*>       m_mapIdx_Lines;

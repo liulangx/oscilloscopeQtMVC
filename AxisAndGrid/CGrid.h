@@ -4,6 +4,7 @@
 #include "textureindex.h"
 #include "Shaders/CRender.h"
 #include "Database.h"
+#include "tools.h"
 #include <QGLWidget>
 #include <QOpenGLTexture>
 #include <QOpenGLFunctions_4_3_Core>
@@ -29,7 +30,9 @@ public:
         YZ
     };
     explicit CGrid(CVaoVboManager* _vaovboManager, QGLWidget* _widget);
+    ~CGrid();
 
+    void cleanUp();
     void setDrawGrid();
     void setDrawTeture();
     void draw();
@@ -45,11 +48,13 @@ public:
     void setFontSize(GLfloat _fontSize = 6.0f);
     void setGridColor(vector4f color);
 
-    void setGridOff();
-    void setGridOn();
+    void setGridOff();  //Deprecated
+    void setGridOn();   //Deprecated
+    void setGridOnOrOff();
 
-    void setAnixLabelOff();
-    void setAnixLabelOn();
+    void setAnixLabelOff(); //Deprecated
+    void setAnixLabelOn();  //Deprecated
+    void setAnixLabelOnOrOff();
 
     void setDrawType(DRAWTYPE drawtype);
 
@@ -125,10 +130,10 @@ private:
     GLboolean getIntvaluePointposOffsetForYAnix(GLfloat yAnix, GLint& yAnixValue, GLfloat& yAnixOffset, GLboolean& greaterThanOneMark);
     GLboolean getIntvaluePointposOffsetForZAnix(GLfloat zAnix, GLint& zAnixValue, GLfloat& zAnixOffset, GLboolean& greaterThanOneMark);
 private:
-    CVaoVboManager* m_vaovboManager;
-    QGLWidget*      m_glWidget;
-    CRender*        m_therender;
-    CRender*        m_gridRender;  //网格的坐标值，xyz符号由该人render渲染，由外部传入
+    CVaoVboManager* m_vaovboManager = nullptr;
+    QGLWidget*      m_glWidget = nullptr;
+    CRender*        m_therender = nullptr;
+    CRender*        m_gridRender = nullptr;  //网格的坐标值，xyz符号由该人render渲染，由外部传入
 
     GLuint m_uniformIndexDrawtypePntAnixGrid;
     GLuint m_uniformIndexRotPntAnixGrid;

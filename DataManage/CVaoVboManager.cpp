@@ -80,3 +80,47 @@ void CVaoVboManager::delVAOVBO(QGLWidget *_widget)
         glDeleteBuffers(1, &(*it));
     }
 }
+
+void CVaoVboManager::delVAO(QGLWidget *_widget, GLuint _vao)
+{
+    if(m_mapVaos.find(_widget) != m_mapVaos.end())
+    {
+        vector<GLuint> tmpO = m_mapVaos.at(_widget);
+        vector<GLuint> tmpN;
+        for (vector<GLuint>::iterator it = tmpO.begin(); it != tmpO.end(); ++it)
+        {
+            if((*it) != _vao)
+                tmpN.push_back(*it);
+        }
+        glDeleteVertexArrays(1, &(_vao));
+
+        m_mapVaos.erase(_widget);
+        m_mapVaos.insert(std::pair<QGLWidget*, vector<GLuint>>(_widget, tmpN));
+    }
+    else
+    {
+        return;
+    }
+}
+
+void CVaoVboManager::delVBO(QGLWidget *_widget, GLuint _vbo)
+{
+    if(m_mapVbos.find(_widget) != m_mapVbos.end())
+    {
+        vector<GLuint> tmpO = m_mapVbos.at(_widget);
+        vector<GLuint> tmpN;
+        for (vector<GLuint>::iterator it = tmpO.begin(); it != tmpO.end(); ++it)
+        {
+            if((*it) != _vbo)
+                tmpN.push_back(*it);
+        }
+        glDeleteBuffers(1, &(_vbo));
+
+        m_mapVbos.erase(_widget);
+        m_mapVbos.insert(std::pair<QGLWidget*, vector<GLuint>>(_widget, tmpN));
+    }
+    else
+    {
+        return;
+    }
+}

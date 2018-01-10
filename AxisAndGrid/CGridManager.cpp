@@ -79,6 +79,16 @@ void CGridManager::adjustGridNumer(u_short _imgIndex, vector2f _xrange, vector2f
     m_grids.at(_imgIndex)->adjustGridNumber(_xrange, _yrange, _zrange, _xRanChange, _yRanChange, _zRanChange);
 }
 
+void CGridManager::setAxisLabelOnOrOff(u_short _index)
+{
+    m_grids.at(_index)->setAnixLabelOnOrOff();
+}
+
+void CGridManager::setGridOnOrOff(u_short _index)
+{
+    m_grids.at(_index)->setGridOnOrOff();
+}
+
 void CGridManager::initial()
 {
     initializeOpenGLFunctions();

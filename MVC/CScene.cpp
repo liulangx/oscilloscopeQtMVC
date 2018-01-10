@@ -147,9 +147,14 @@ void CScene::initGL(u_short _index)
 }
 
 
-void CScene::addPoint(size_t _lineindex, const vector3f &_position)
+bool CScene::addPoint(u_short _imgIndex, size_t _lineindex, const vector3f &_position)
 {
+    return m_sceneManager->addPoint(_imgIndex, _lineindex, _position);
+}
 
+void CScene::setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color)
+{
+    m_sceneManager->setColor(_imgIndex, _lineIndex, _color);
 }
 
 void CScene::onNewItemTriggered(ItemDialog::ItemType _type, u_short _index)
@@ -158,6 +163,31 @@ void CScene::onNewItemTriggered(ItemDialog::ItemType _type, u_short _index)
     case ItemDialog::ItemType::MakeCurrent:
     {
         m_sceneManager->setCurrentShowIndex(_index);
+        break;
+    }
+    case ItemDialog::ItemType::HoVAxis:
+    {
+        m_sceneManager->setAxisHideOrShow(_index);
+        break;
+    }
+    case ItemDialog::ItemType::HoVGrid:
+    {
+        m_sceneManager->setGridHideOrShow(_index);
+        break;
+    }
+    case ItemDialog::ItemType::HoVXY:
+    {
+        m_sceneManager->setXYHideOrShow(_index);
+        break;
+    }
+    case ItemDialog::ItemType::HoVXZ:
+    {
+        m_sceneManager->setXZHideOrShow(_index);
+        break;
+    }
+    case ItemDialog::ItemType::HoVYZ:
+    {
+        m_sceneManager->setYZHideOrShow(_index);
         break;
     }
     default:

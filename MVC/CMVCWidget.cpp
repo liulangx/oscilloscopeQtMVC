@@ -14,7 +14,7 @@ CMVCWidget::CMVCWidget(QWidget *parent)
     m_graphicsView->setScene(m_scene);
     m_layout.addWidget(m_graphicsView);
     this->setLayout(&m_layout);
-    initGL();
+//    initGL();
 }
 
 CMVCWidget::CMVCWidget(QRect _initWindowForView, QWidget *parent)
@@ -31,7 +31,7 @@ CMVCWidget::CMVCWidget(QRect _initWindowForView, QWidget *parent)
     m_graphicsView->setScene(m_scene);
     m_layout.addWidget(m_graphicsView);
     this->setLayout(&m_layout);
-    initGL();
+//    initGL();
 //    connect(this, SIGNAL(rotationChanged(QMatrix4x4)), m_scene, SLOT(onRotationChanged(QMatrix4x4)));
 }
 
@@ -41,7 +41,22 @@ void CMVCWidget::initGL()
     m_scene->initGL(1);
     m_scene->initGL(2);
 
-//    m_scene->initGL(0);
+    //    m_scene->initGL(0);
+}
+
+void CMVCWidget::initGL(u_short _imgIndex)
+{
+    m_scene->initGL(_imgIndex);
+}
+
+bool CMVCWidget::addPoint(u_short _imgIndex, size_t _lineIndex, const vector3f &_position)
+{
+    return m_scene->addPoint(_imgIndex, _lineIndex, _position);
+}
+
+void CMVCWidget::setColor(u_short _imgIndex, size_t _lineIndex, vector4f _color)
+{
+    m_scene->setColor(_imgIndex, _lineIndex, _color);
 }
 
 void CMVCWidget::update()
